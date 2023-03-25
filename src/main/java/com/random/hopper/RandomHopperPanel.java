@@ -105,7 +105,7 @@ class RandomHopperPanel extends PluginPanel  {
         JPanel skillTotalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         skillTotalPanel.add(createLabel("Skill total: "));
         skillTotalDropdown = new JComboBox<>(comboBoxOptions);
-        skillTotalDropdown.setSelectedIndex(1);
+        skillTotalDropdown.setSelectedIndex(2);
         skillTotalPanel.add(skillTotalDropdown);
         panel.add(skillTotalPanel);
 

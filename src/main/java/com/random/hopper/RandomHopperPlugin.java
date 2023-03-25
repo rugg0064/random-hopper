@@ -16,7 +16,6 @@ import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.WorldChanged;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.WorldService;
 import net.runelite.client.plugins.Plugin;
@@ -34,14 +33,13 @@ import java.util.*;
 
 @Slf4j
 @PluginDescriptor(
-	name = "Random World Hopper",
+	name = "Random Hopper",
 	description = "",
 	tags = {"World Hop"}
 )
 public class RandomHopperPlugin extends Plugin
 {
 	@Inject private Client client;
-	@Inject private RandomHopperConfig config;
 	@Inject private ClientToolbar clientToolbar;
 	@Inject private WorldService worldService;
 	@Inject private ClientThread clientThread;
@@ -59,10 +57,10 @@ public class RandomHopperPlugin extends Plugin
 	protected void startUp() throws Exception
 	{
 		targetWorld = null;
-		BufferedImage icon = ImageUtil.loadImageResource(WorldHopperPlugin.class, "icon.png");
+		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/randomhopper_icon.png");
 		panel = new RandomHopperPanel(this);
 		navButton = NavigationButton.builder()
-				.tooltip("Random World Hopper")
+				.tooltip("Random Hopper")
 				.icon(icon)
 				.priority(5)
 				.panel(panel)
@@ -76,12 +74,6 @@ public class RandomHopperPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		clientToolbar.removeNavigation(navButton);
-	}
-
-	@Provides
-	RandomHopperConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(RandomHopperConfig.class);
 	}
 
 	@Subscribe
