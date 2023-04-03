@@ -36,6 +36,8 @@ class RandomHopperPanel extends PluginPanel  {
     private JRadioButton questButton;
     private JRadioButton freshButton;
     private JRadioButton pvpArenaButton;
+    private JRadioButton betaButton;
+    private JRadioButton tournamentButton;
 
     private JTextField seedTextField;
 
@@ -151,6 +153,8 @@ class RandomHopperPanel extends PluginPanel  {
         questButton = new JRadioButton("Quest Speedrun");
         freshButton = new JRadioButton("Fresh Start");
         pvpArenaButton = new JRadioButton("PVP Arena");
+        betaButton = new JRadioButton("Beta");
+        tournamentButton = new JRadioButton("Tournament");
 
         normalButton.setSelected(true);
 
@@ -160,6 +164,8 @@ class RandomHopperPanel extends PluginPanel  {
         typeGroup.add(questButton);
         typeGroup.add(freshButton);
         typeGroup.add(pvpArenaButton);
+        typeGroup.add(betaButton);
+        typeGroup.add(tournamentButton);
 
         typePanel.add(normalButton);
         typePanel.add(deadmanButton);
@@ -167,6 +173,8 @@ class RandomHopperPanel extends PluginPanel  {
         typePanel.add(questButton);
         typePanel.add(freshButton);
         typePanel.add(pvpArenaButton);
+        typePanel.add(betaButton);
+        typePanel.add(tournamentButton);
 
         panel.add(typePanel);
 
@@ -244,7 +252,7 @@ class RandomHopperPanel extends PluginPanel  {
         for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, targetWorldDropdown}) {
             component.addActionListener(updateWorldsListener);
         }
-        for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton}) {
+        for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, tournamentButton}) {
             component.addActionListener(updateWorldsListener);
         }
         for(JCheckBox component : new JCheckBox[] {gerBox, usaBox, ausBox, ukBox}) {
@@ -342,6 +350,12 @@ class RandomHopperPanel extends PluginPanel  {
         }
         if(pvpArenaButton.isSelected()) {
             filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldPVPArena, new TrinaryWorldFilterParameters("pvpArena", true, false)));
+        }
+        if(betaButton.isSelected()) {
+            filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldBeta, new TrinaryWorldFilterParameters("beta", true, false)));
+        }
+        if(tournamentButton.isSelected()) {
+            filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldTournament, new TrinaryWorldFilterParameters("tournament", true, false)));
         }
         return filters;
     }

@@ -4,6 +4,7 @@ package com.random.hopper.filters;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldType;
 
+import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class WorldFilterHelpers {
@@ -37,6 +38,19 @@ public class WorldFilterHelpers {
     public static final Predicate<World> isWorldPVPArena =
             world -> world.getTypes().contains(WorldType.PVP_ARENA);
 
-    public static final Predicate<World> isWorldNormal =
-            world -> !isWorldDeadman.test(world) && !isWorldSeasonal.test(world) && !isWorldFreshStart.test(world) && !isWorldQuest.test(world) && !isWorldPVPArena.test(world);
+    public static final Predicate<World> isWorldBeta =
+            world -> world.getTypes().contains(WorldType.NOSAVE_MODE);
+
+    public static final Predicate<World> isWorldTournament =
+            world -> world.getTypes().contains(WorldType.TOURNAMENT);
+
+    public static final Predicate<World> isWorldNormal = world ->
+            !isWorldDeadman.test(world) &&
+            !isWorldSeasonal.test(world) &&
+            !isWorldFreshStart.test(world) &&
+            !isWorldQuest.test(world) &&
+            !isWorldPVPArena.test(world) &&
+            !isWorldBeta.test(world) &&
+            !isWorldTournament.test(world);
+
 }
