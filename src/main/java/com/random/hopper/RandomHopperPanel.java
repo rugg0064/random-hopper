@@ -57,7 +57,7 @@ class RandomHopperPanel extends PluginPanel  {
         add(panel);
     }
 
-    Dimension preferredSize = new Dimension(116, 16);
+    Dimension preferredSize = new Dimension(100, 16);
     //private static final String[] comboBoxText = new String[]{"Require", "Reject", "Don't filter"};
     private static final TrinaryWorldFilterParameters[] comboBoxOptions =
         new TrinaryWorldFilterParameters[] {
@@ -199,7 +199,7 @@ class RandomHopperPanel extends PluginPanel  {
 
         // Add a row with "Previous" and "Next" buttons to the panel
         JPanel prevNextPanel = new JPanel();
-        Dimension buttonPreferredSize = new Dimension(116, 32);
+        Dimension buttonPreferredSize = new Dimension(110, 32);
         JButton prevButton = new JButton("Hop Previous");
         prevButton.setPreferredSize(buttonPreferredSize);
         prevButton.setToolTipText(hopPreviousToolTipText);
