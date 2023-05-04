@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import javax.inject.Inject;
 
+import com.google.inject.Provides;
 import com.random.hopper.filters.*;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -13,12 +14,15 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WorldChanged;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.WorldService;
+import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.HotkeyListener;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.WorldUtil;
 import net.runelite.http.api.worlds.World;
@@ -39,6 +43,9 @@ public class RandomHopperPlugin extends Plugin
 	@Inject private ClientToolbar clientToolbar;
 	@Inject private WorldService worldService;
 	@Inject private ClientThread clientThread;
+	@Inject private ConfigManager configManager;
+	@Inject private RandomHopperConfig config;
+	@Inject private KeyManager keyManager;
 
 	private NavigationButton navButton;
 	private RandomHopperPanel panel;
@@ -52,6 +59,9 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		keyManager.registerKeyListener(randomKeyListener);
+		keyManager.registerKeyListener(previousKeyListener);
+		keyManager.registerKeyListener(nextKeyListener);
 		targetWorld = null;
 		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/randomhopper_icon.png");
 		panel = new RandomHopperPanel(this);
@@ -70,6 +80,15 @@ public class RandomHopperPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		clientToolbar.removeNavigation(navButton);
+		keyManager.unregisterKeyListener(randomKeyListener);
+		keyManager.unregisterKeyListener(previousKeyListener);
+		keyManager.unregisterKeyListener(nextKeyListener);
+	}
+
+	@Provides
+	RandomHopperConfig getConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(RandomHopperConfig.class);
 	}
 
 	@Subscribe
@@ -318,4 +337,29 @@ public class RandomHopperPlugin extends Plugin
 			return new Integer[] {prevWorldID, currentWorldID, nextWorldID};
 		}
 	}
+
+	private final HotkeyListener randomKeyListener = new HotkeyListener(() -> config.randomKey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			clientThread.invoke(() -> doRandomHop());
+		}
+	};
+	private final HotkeyListener previousKeyListener = new HotkeyListener(() -> config.previousKey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			clientThread.invoke(() -> hopPrevious());
+		}
+	};
+	private final HotkeyListener nextKeyListener = new HotkeyListener(() -> config.nextKey())
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			clientThread.invoke(() -> hopNext());
+		}
+	};
 }
