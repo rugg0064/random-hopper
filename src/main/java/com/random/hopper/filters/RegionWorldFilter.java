@@ -14,10 +14,10 @@ public class RegionWorldFilter implements WorldFilter {
 
     public RegionWorldFilter(boolean allowAustralia, boolean allowUSAEast, boolean allowUSAWest, boolean allowGermany, boolean allowUK) {
         this.allowAustralia = allowAustralia;
+		this.allowUSAEast = allowUSAEast;
+		this.allowUSAWest = allowUSAWest;
         this.allowGermany = allowGermany;
         this.allowUK = allowUK;
-        this.allowUSAEast = allowUSAEast;
-		this.allowUSAWest = allowUSAWest;
     }
 
     @Override
