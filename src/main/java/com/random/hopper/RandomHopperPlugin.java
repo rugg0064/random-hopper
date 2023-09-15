@@ -26,6 +26,7 @@ import net.runelite.client.util.HotkeyListener;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.WorldUtil;
 import net.runelite.http.api.worlds.World;
+import net.runelite.http.api.worlds.WorldRegion;
 import net.runelite.http.api.worlds.WorldResult;
 
 import java.awt.image.BufferedImage;
@@ -59,6 +60,9 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		clientThread.invoke(() -> {
+			WorldHelper.setWorldEnum(client.getEnum(4992));
+		});
 		keyManager.registerKeyListener(randomKeyListener);
 		keyManager.registerKeyListener(previousKeyListener);
 		keyManager.registerKeyListener(nextKeyListener);

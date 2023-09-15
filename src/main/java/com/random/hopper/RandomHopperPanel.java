@@ -23,7 +23,8 @@ class RandomHopperPanel extends PluginPanel  {
     private JComboBox skillTotalDropdown;
     private JComboBox targetWorldDropdown;
 
-    private JCheckBox usaBox;
+    private JCheckBox usaEastBox;
+	private JCheckBox usaWestBox;
     private JCheckBox ukBox;
     private JCheckBox gerBox;
     private JCheckBox ausBox;
@@ -130,11 +131,12 @@ class RandomHopperPanel extends PluginPanel  {
         JPanel regionPanel = new JPanel();
         regionPanel.setBorder(BorderFactory.createTitledBorder("Region"));
         regionPanel.setLayout(new GridLayout(0, 1));
-        usaBox = new JCheckBox("U.S.A");
+		usaEastBox = new JCheckBox("U.S.A East");
+		usaWestBox = new JCheckBox("U.S.A West");
         ukBox = new JCheckBox("U.K.");
         gerBox = new JCheckBox("Germany");
         ausBox = new JCheckBox("Australia");
-        for(JCheckBox box : new JCheckBox[]{usaBox, ukBox, gerBox, ausBox}){
+        for(JCheckBox box : new JCheckBox[]{usaEastBox, usaWestBox, ukBox, gerBox, ausBox}){
             regionPanel.add(box);
             box.setSelected(true);
         }
@@ -255,7 +257,7 @@ class RandomHopperPanel extends PluginPanel  {
         for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, tournamentButton}) {
             component.addActionListener(updateWorldsListener);
         }
-        for(JCheckBox component : new JCheckBox[] {gerBox, usaBox, ausBox, ukBox}) {
+        for(JCheckBox component : new JCheckBox[] {gerBox, usaEastBox, usaWestBox, ausBox, ukBox}) {
             component.addActionListener(updateWorldsListener);
         }
 
@@ -329,7 +331,8 @@ class RandomHopperPanel extends PluginPanel  {
 
         filters.add(new RegionWorldFilter(
                 ausBox.isSelected(),
-                usaBox.isSelected(),
+				usaEastBox.isSelected(),
+				usaWestBox.isSelected(),
                 gerBox.isSelected(),
                 ukBox.isSelected()));
 

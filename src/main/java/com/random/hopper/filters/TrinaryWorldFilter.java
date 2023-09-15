@@ -5,7 +5,6 @@ import net.runelite.http.api.worlds.World;
 import java.util.function.Predicate;
 
 // Assumes that the world being compared can always BE filtered
-//
 public class TrinaryWorldFilter implements WorldFilter{
     Predicate<World> matcher;
     TrinaryWorldFilterParameters parameters;

@@ -4,7 +4,6 @@ package com.random.hopper.filters;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldType;
 
-import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class WorldFilterHelpers {

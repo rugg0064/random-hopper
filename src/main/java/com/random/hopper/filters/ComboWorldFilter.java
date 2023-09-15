@@ -2,7 +2,6 @@ package com.random.hopper.filters;
 
 import net.runelite.http.api.worlds.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // A class that can merge filters together such that all filters

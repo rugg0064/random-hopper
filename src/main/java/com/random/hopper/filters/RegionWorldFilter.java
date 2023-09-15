@@ -1,6 +1,7 @@
 package com.random.hopper.filters;
 
 
+import com.random.hopper.WorldHelper;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldRegion;
 
@@ -8,13 +9,15 @@ public class RegionWorldFilter implements WorldFilter {
     private boolean allowAustralia;
     private boolean allowGermany;
     private boolean allowUK;
-    private boolean allowUSA;
+    private boolean allowUSAEast;
+	private boolean allowUSAWest;
 
-    public RegionWorldFilter(boolean allowAustralia, boolean allowUSA, boolean allowGermany, boolean allowUK) {
+    public RegionWorldFilter(boolean allowAustralia, boolean allowUSAEast, boolean allowUSAWest, boolean allowGermany, boolean allowUK) {
         this.allowAustralia = allowAustralia;
         this.allowGermany = allowGermany;
         this.allowUK = allowUK;
-        this.allowUSA = allowUSA;
+        this.allowUSAEast = allowUSAEast;
+		this.allowUSAWest = allowUSAWest;
     }
 
     @Override
@@ -28,7 +31,14 @@ public class RegionWorldFilter implements WorldFilter {
             case UNITED_KINGDOM:
                 return allowUK;
             case UNITED_STATES_OF_AMERICA:
-                return allowUSA;
+				switch(WorldHelper.getUSWorldSide(world.getId())) {
+					case EAST:
+						return allowUSAEast;
+					case WEST:
+						return allowUSAWest;
+					default:
+						return false;
+				}
             default:
                 return false;
         }
@@ -40,7 +50,8 @@ public class RegionWorldFilter implements WorldFilter {
                 "allowAustralia=" + allowAustralia +
                 ", allowGermany=" + allowGermany +
                 ", allowUK=" + allowUK +
-                ", allowUSA=" + allowUSA +
+                ", allowUSAEast=" + allowUSAEast +
+				", allowUSAWest=" + allowUSAWest +
                 '}';
     }
 }
