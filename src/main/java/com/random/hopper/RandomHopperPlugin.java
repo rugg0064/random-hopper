@@ -31,6 +31,7 @@ import net.runelite.http.api.worlds.WorldResult;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
+import net.runelite.http.api.worlds.WorldType;
 
 @Slf4j
 @PluginDescriptor(
