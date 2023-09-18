@@ -57,11 +57,14 @@ public class RandomHopperPlugin extends Plugin
 	private BiMap<Integer, Integer> cycleMapping;
 	private LinkedList<Integer> worldQueue;
 
+	private boolean shouldRecalculateWorldsOnTick = false;
+
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
 		clientThread.invoke(() -> {
 			WorldHelper.setWorldEnum(client.getEnum(4992));
+			shouldRecalculateWorldsOnTick = true;
 		});
 		keyManager.registerKeyListener(randomKeyListener);
 		keyManager.registerKeyListener(previousKeyListener);
@@ -101,6 +104,11 @@ public class RandomHopperPlugin extends Plugin
 		if (targetWorld == null)
 		{
 			return;
+		}
+		if(shouldRecalculateWorldsOnTick) {
+			newCycle();
+			panel.updateAdjacentWorlds();
+			shouldRecalculateWorldsOnTick = false;
 		}
 		if(isWorldHopperOpen()) {
 			//System.out.println("Trying to client hopworld");

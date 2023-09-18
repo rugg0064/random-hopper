@@ -12,6 +12,9 @@ public class WorldHelper
 	}
 
 	public static USWorld getUSWorldSide(int worldNumber) {
+		if(worldEnum == null) {
+			return null;
+		}
 		boolean worldInKeys = Arrays.stream(worldEnum.getKeys()).anyMatch((key) -> key == worldNumber);
 		if (worldInKeys)
 		{

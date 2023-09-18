@@ -1,6 +1,7 @@
 package com.random.hopper.filters;
 
 
+import com.random.hopper.USWorld;
 import com.random.hopper.WorldHelper;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldRegion;
@@ -31,7 +32,11 @@ public class RegionWorldFilter implements WorldFilter {
             case UNITED_KINGDOM:
                 return allowUK;
             case UNITED_STATES_OF_AMERICA:
-				switch(WorldHelper.getUSWorldSide(world.getId())) {
+				USWorld usWorld = WorldHelper.getUSWorldSide(world.getId());
+				if(usWorld == null) {
+					return false;
+				}
+				switch(usWorld) {
 					case EAST:
 						return allowUSAEast;
 					case WEST:
