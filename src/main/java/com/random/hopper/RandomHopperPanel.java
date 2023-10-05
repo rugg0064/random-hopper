@@ -21,7 +21,7 @@ class RandomHopperPanel extends PluginPanel  {
     private JComboBox pvpDropdown;
     private JComboBox highRiskDropdown;
     private JComboBox skillTotalDropdown;
-    private JComboBox targetWorldDropdown;
+    private JComboBox bountyWorldDropdown;
 
     private JCheckBox usaEastBox;
 	private JCheckBox usaWestBox;
@@ -38,6 +38,7 @@ class RandomHopperPanel extends PluginPanel  {
     private JRadioButton freshButton;
     private JRadioButton pvpArenaButton;
     private JRadioButton betaButton;
+	private JRadioButton noSaveButton;
     private JRadioButton tournamentButton;
 
     private JTextField seedTextField;
@@ -104,7 +105,7 @@ class RandomHopperPanel extends PluginPanel  {
         highRiskPanel.add(highRiskDropdown);
         panel.add(highRiskPanel);
 
-        // Add the "Target World" dropdown
+        // Add the "Skill total World" dropdown
         JPanel skillTotalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         skillTotalPanel.add(createLabel("Skill total: "));
         skillTotalDropdown = new JComboBox<>(comboBoxOptions);
@@ -112,13 +113,13 @@ class RandomHopperPanel extends PluginPanel  {
         skillTotalPanel.add(skillTotalDropdown);
         panel.add(skillTotalPanel);
 
-        // Add the "Target World" dropdown
-        JPanel targetWorldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        targetWorldPanel.add(createLabel("Target World: "));
-        targetWorldDropdown = new JComboBox<>(comboBoxOptions);
-        targetWorldDropdown.setSelectedIndex(1);
-        targetWorldPanel.add(targetWorldDropdown);
-        panel.add(targetWorldPanel);
+        // Add the "Bounty World" dropdown
+        JPanel bountyWorldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        bountyWorldPanel.add(createLabel("Bounty World: "));
+        bountyWorldDropdown = new JComboBox<>(comboBoxOptions);
+        bountyWorldDropdown.setSelectedIndex(1);
+        bountyWorldPanel.add(bountyWorldDropdown);
+        panel.add(bountyWorldPanel);
 
         JPanel groupCodePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         seedTextField = new JTextField(8);
@@ -156,7 +157,8 @@ class RandomHopperPanel extends PluginPanel  {
         freshButton = new JRadioButton("Fresh Start");
         pvpArenaButton = new JRadioButton("PVP Arena");
         betaButton = new JRadioButton("Beta");
-        tournamentButton = new JRadioButton("Tournament");
+		noSaveButton = new JRadioButton("No Save");
+		tournamentButton = new JRadioButton("Tournament");
 
         normalButton.setSelected(true);
 
@@ -167,6 +169,7 @@ class RandomHopperPanel extends PluginPanel  {
         typeGroup.add(freshButton);
         typeGroup.add(pvpArenaButton);
         typeGroup.add(betaButton);
+		typeGroup.add(noSaveButton);
         typeGroup.add(tournamentButton);
 
         typePanel.add(normalButton);
@@ -176,6 +179,7 @@ class RandomHopperPanel extends PluginPanel  {
         typePanel.add(freshButton);
         typePanel.add(pvpArenaButton);
         typePanel.add(betaButton);
+		typePanel.add(noSaveButton);
         typePanel.add(tournamentButton);
 
         panel.add(typePanel);
@@ -251,7 +255,7 @@ class RandomHopperPanel extends PluginPanel  {
             updateAdjacentWorlds();
         };
 
-        for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, targetWorldDropdown}) {
+        for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, bountyWorldDropdown}) {
             component.addActionListener(updateWorldsListener);
         }
         for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, tournamentButton}) {
@@ -324,10 +328,10 @@ class RandomHopperPanel extends PluginPanel  {
                 WorldFilterHelpers.isWorldSkillTotal,
                 (TrinaryWorldFilterParameters) skillTotalDropdown.getSelectedItem()));
 
-        // target world filter;
+        // bounty world filter;
         filters.add(new TrinaryWorldFilter(
-                WorldFilterHelpers.isWorldTarget,
-                (TrinaryWorldFilterParameters) targetWorldDropdown.getSelectedItem()));
+                WorldFilterHelpers.isWorldBounty,
+                (TrinaryWorldFilterParameters) bountyWorldDropdown.getSelectedItem()));
 
         filters.add(new RegionWorldFilter(
                 ausBox.isSelected(),
@@ -357,6 +361,9 @@ class RandomHopperPanel extends PluginPanel  {
         if(betaButton.isSelected()) {
             filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldBeta, new TrinaryWorldFilterParameters("beta", true, false)));
         }
+		if(noSaveButton.isSelected()) {
+			filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldNoSave, new TrinaryWorldFilterParameters("no save", true, false)));
+		}
         if(tournamentButton.isSelected()) {
             filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldTournament, new TrinaryWorldFilterParameters("tournament", true, false)));
         }

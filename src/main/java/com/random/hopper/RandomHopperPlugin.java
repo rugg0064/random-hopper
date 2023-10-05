@@ -63,6 +63,7 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		System.out.println("AAAAA");
 		clientThread.invoke(() -> {
 			WorldHelper.setWorldEnum(client.getEnum(4992));
 			shouldRecalculateWorldsOnTick = true;
@@ -173,6 +174,7 @@ public class RandomHopperPlugin extends Plugin
 		ArrayList<World> validWorlds = new ArrayList<>();
 		for(World world : worlds) {
 			EnumSet types = world.getTypes();
+			System.out.println(world);
 			if(filter.isWorldAccepted(world)) {
 				validWorlds.add(world);
 			}
@@ -258,13 +260,16 @@ public class RandomHopperPlugin extends Plugin
 		Collections.sort(allWorlds, Comparator.comparingInt(World::getId));
 		Collections.shuffle(allWorlds, new Random(panel.getSeed()));
 		List<World> validWorlds = filterWorlds(allWorlds, comboFilter);
+		for(World world : validWorlds) {
+			System.out.println(world);
+		}
 
 		ArrayList<Integer> validWorldIDs = new ArrayList<>();
 		for(World world : validWorlds) {
 			validWorldIDs.add(world.getId());
 		}
 
-		if(validWorlds.size() == 0 || validWorlds.size() == 1) {
+		if(validWorlds.size() == 0) {
 			cycleMapping = null;
 			return;
 		}
@@ -276,38 +281,8 @@ public class RandomHopperPlugin extends Plugin
 		cycleMapping.put(validWorldIDs.get(validWorldIDs.size() - 1), validWorldIDs.get(0));
 	}
 
-	// TODO: Replace regular true random hopping with a small anti-repetition bias?
-	/*
-	void doThresholdHop() {
-		int maxBlocks = 3;
-		List<WorldFilter> filters = panel.getFilters();
-		filters.add(new BlockIDWorldFilter(client.getWorld()));
-		Iterator<Integer> worldHistoryIterator = worldQueue.iterator();
-		HashSet<Integer> blockedWorlds = new HashSet<>();
-
-		while(blockedWorlds.size() != maxBlocks && worldHistoryIterator.hasNext()) {
-			int worldID = worldHistoryIterator.next();
-			blockedWorlds.add(worldID);
-		}
-		for(Integer worldID : blockedWorlds) {
-			filters.add(new BlockIDWorldFilter(worldID));
-			System.out.printf("Blocking %s%n", worldID);
-		}
-		WorldFilter comboFilter = new ComboWorldFilter(filters);
-		ArrayList<World> validWorlds = getValidWorlds(comboFilter);
-		Random r = new Random();
-		if(validWorlds.size() == 0) {
-			System.out.printf("No valid worlds, not hopping%n");
-			return;
-		}
-		int chosenIndex = r.nextInt(validWorlds.size());
-		World chosenWorld = validWorlds.get(chosenIndex);
-		System.out.printf("Selecting world %d%n", chosenWorld.getId());
-		clientThread.invoke(() -> hop(chosenWorld));
-	}
-	*/
-
 	public int getWorldCount() {
+		System.out.println(cycleMapping);
 		if(cycleMapping == null) {
 			return 0;
 		} else {
@@ -340,7 +315,13 @@ public class RandomHopperPlugin extends Plugin
 	public Integer[] getAdjacentWorlds() {
 		int currentWorldID = client.getWorld();
 		if(cycleMapping == null || !cycleMapping.containsKey(currentWorldID))
-		{ // Not in the cycle currently - next would be random
+		{
+			// If there is only one available world though, then it's always that one.
+			if(cycleMapping != null && cycleMapping.size() == 1) {
+				int onlyWorld = cycleMapping.values().iterator().next();
+				return new Integer[] {onlyWorld, currentWorldID, onlyWorld};
+			}
+			// Not in the cycle currently - next would be random
 			return new Integer[] {null, currentWorldID, null};
 		}
 		else

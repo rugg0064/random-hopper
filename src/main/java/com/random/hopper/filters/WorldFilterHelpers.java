@@ -19,7 +19,7 @@ public class WorldFilterHelpers {
     public static final Predicate<World> isWorldSkillTotal =
             world -> world.getTypes().contains(WorldType.SKILL_TOTAL);
 
-    public static final Predicate<World> isWorldTarget =
+    public static final Predicate<World> isWorldBounty =
             world -> world.getTypes().contains(WorldType.BOUNTY);
 
     public static final Predicate<World> isWorldDeadman =
@@ -38,7 +38,10 @@ public class WorldFilterHelpers {
             world -> world.getTypes().contains(WorldType.PVP_ARENA);
 
     public static final Predicate<World> isWorldBeta =
-            world -> world.getTypes().contains(WorldType.NOSAVE_MODE);
+            world -> world.getTypes().contains(WorldType.BETA_WORLD);
+
+	public static final Predicate<World> isWorldNoSave =
+		world -> world.getTypes().contains(WorldType.NOSAVE_MODE);
 
     public static final Predicate<World> isWorldTournament =
             world -> world.getTypes().contains(WorldType.TOURNAMENT);
@@ -50,6 +53,7 @@ public class WorldFilterHelpers {
             !isWorldQuest.test(world) &&
             !isWorldPVPArena.test(world) &&
             !isWorldBeta.test(world) &&
+			!isWorldNoSave.test(world) &&
             !isWorldTournament.test(world);
 
 }
