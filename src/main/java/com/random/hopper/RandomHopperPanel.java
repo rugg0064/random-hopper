@@ -258,7 +258,7 @@ class RandomHopperPanel extends PluginPanel  {
         for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, bountyWorldDropdown}) {
             component.addActionListener(updateWorldsListener);
         }
-        for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, tournamentButton}) {
+        for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton}) {
             component.addActionListener(updateWorldsListener);
         }
         for(JCheckBox component : new JCheckBox[] {gerBox, usaEastBox, usaWestBox, ausBox, ukBox}) {
