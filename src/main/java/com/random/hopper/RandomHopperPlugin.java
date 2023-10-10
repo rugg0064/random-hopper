@@ -63,7 +63,6 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		System.out.println("AAAAA");
 		clientThread.invoke(() -> {
 			WorldHelper.setWorldEnum(client.getEnum(4992));
 			shouldRecalculateWorldsOnTick = true;
@@ -113,7 +112,6 @@ public class RandomHopperPlugin extends Plugin
 			shouldRecalculateWorldsOnTick = false;
 		}
 		if(isWorldHopperOpen()) {
-			//System.out.println("Trying to client hopworld");
 			client.hopToWorld(convertToApiWorld(targetWorld));
 			targetWorld = null;
 		} else {
@@ -125,7 +123,6 @@ public class RandomHopperPlugin extends Plugin
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
 		if(gameStateChanged.getGameState() == GameState.LOGGED_IN) {
-			//System.out.printf("Hopped to %s\n", client.getWorld());
 			worldQueue.addFirst(client.getWorld());
 			panel.updateAdjacentWorlds();
 		}
@@ -174,7 +171,6 @@ public class RandomHopperPlugin extends Plugin
 		ArrayList<World> validWorlds = new ArrayList<>();
 		for(World world : worlds) {
 			EnumSet types = world.getTypes();
-			System.out.println(world);
 			if(filter.isWorldAccepted(world)) {
 				validWorlds.add(world);
 			}
@@ -260,9 +256,6 @@ public class RandomHopperPlugin extends Plugin
 		Collections.sort(allWorlds, Comparator.comparingInt(World::getId));
 		Collections.shuffle(allWorlds, new Random(panel.getSeed()));
 		List<World> validWorlds = filterWorlds(allWorlds, comboFilter);
-		for(World world : validWorlds) {
-			System.out.println(world);
-		}
 
 		ArrayList<Integer> validWorldIDs = new ArrayList<>();
 		for(World world : validWorlds) {
@@ -282,7 +275,6 @@ public class RandomHopperPlugin extends Plugin
 	}
 
 	public int getWorldCount() {
-		System.out.println(cycleMapping);
 		if(cycleMapping == null) {
 			return 0;
 		} else {
@@ -299,12 +291,10 @@ public class RandomHopperPlugin extends Plugin
 		ArrayList<World> validWorlds = getValidWorlds(comboFilter);
 		Random r = new Random();
 		if(validWorlds.size() == 0) {
-			//System.out.printf("No valid worlds, not hopping");
 			return;
 		}
 		int chosenIndex = r.nextInt(validWorlds.size());
 		World chosenWorld = validWorlds.get(chosenIndex);
-		//System.out.printf("Selecting world %d%n", chosenWorld.getId());
 		clientThread.invoke(() -> hop(chosenWorld));
 	}
 
