@@ -1,0 +1,5 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "jdk.jdkhome": "c:\\Program Files\\Amazon Corretto\\jdk11.0.16_9",
+    "java.jdt.ls.java.home": "c:\\Program Files\\Amazon Corretto\\jdk11.0.16_9"
+}
