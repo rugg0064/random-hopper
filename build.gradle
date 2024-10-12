@@ -37,6 +37,6 @@ task runRandomHopperTest(type: JavaExec) {
     
     classpath = sourceSets.test.runtimeClasspath
     main = 'com.random.hopper.randomHopperTest'
-    args = []
+    args = ['--developer-mode']
     jvmArgs = ['-ea']
 }

@@ -1,11 +1,26 @@
 package com.random.hopper;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+
 import javax.inject.Inject;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.inject.Provides;
-import com.random.hopper.filters.*;
+import com.random.hopper.filters.BlockIDWorldFilter;
+import com.random.hopper.filters.ComboWorldFilter;
+import com.random.hopper.filters.SkillTotalWorldFilter;
+import com.random.hopper.filters.WorldFilter;
+
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -26,12 +41,7 @@ import net.runelite.client.util.HotkeyListener;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.WorldUtil;
 import net.runelite.http.api.worlds.World;
-import net.runelite.http.api.worlds.WorldRegion;
 import net.runelite.http.api.worlds.WorldResult;
-
-import java.awt.image.BufferedImage;
-import java.util.*;
-import net.runelite.http.api.worlds.WorldType;
 
 @Slf4j
 @PluginDescriptor(
@@ -48,6 +58,10 @@ public class RandomHopperPlugin extends Plugin
 	@Inject private ConfigManager configManager;
 	@Inject private RandomHopperConfig config;
 	@Inject private KeyManager keyManager;
+	@Inject private Gson gson;
+
+	private static final String CONFIG_GROUP = "randomhopper";
+	private static final String CONFIG_KEY = "config";
 
 	private NavigationButton navButton;
 	private RandomHopperPanel panel;
@@ -56,7 +70,6 @@ public class RandomHopperPlugin extends Plugin
 
 	// A map from current world to next world
 	private BiMap<Integer, Integer> cycleMapping;
-	private LinkedList<Integer> worldQueue;
 
 	private boolean shouldRecalculateWorldsOnTick = false;
 
@@ -79,8 +92,8 @@ public class RandomHopperPlugin extends Plugin
 				.priority(5)
 				.panel(panel)
 				.build();
+		panel.setUiFromConfig(loadConfig());
 		panel.updateWorldCountLabel();
-		worldQueue = new LinkedList<>();
 		clientToolbar.addNavigation(navButton);
 	}
 
@@ -123,7 +136,6 @@ public class RandomHopperPlugin extends Plugin
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
 		if(gameStateChanged.getGameState() == GameState.LOGGED_IN) {
-			worldQueue.addFirst(client.getWorld());
 			panel.updateAdjacentWorlds();
 		}
 	}
@@ -346,4 +358,25 @@ public class RandomHopperPlugin extends Plugin
 			clientThread.invoke(() -> hopNext());
 		}
 	};
+
+	public void saveConfig(FilterConfig config) {
+		configManager.unsetConfiguration(CONFIG_GROUP, CONFIG_KEY);
+		String json = gson.toJson(config);
+		System.out.printf("Got string %s%n", json);
+		configManager.setConfiguration(CONFIG_GROUP, CONFIG_KEY, json);
+	}
+
+	public FilterConfig loadConfig() {
+		try {
+			String json = configManager.getConfiguration(CONFIG_GROUP, CONFIG_KEY);
+			System.out.printf("Got string %s%n", json);
+			Type type = new TypeToken<FilterConfig>() {}.getType();
+			FilterConfig config = gson.fromJson(json, type);
+			return config;
+		} catch (Exception e) {
+			System.out.println("ERROR");
+			System.out.println(e);
+		}
+		return null;
+	}
 }

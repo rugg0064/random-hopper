@@ -41,6 +41,11 @@ class RandomHopperPanel extends PluginPanel  {
 	private JRadioButton noSaveButton;
     private JRadioButton tournamentButton;
 
+    public JRadioButton[] getWorldTypeButtons() {
+        return new JRadioButton[]{
+            normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton
+        };
+    }
     private JTextField seedTextField;
 
     private JLabel prevLabel;
@@ -76,8 +81,20 @@ class RandomHopperPanel extends PluginPanel  {
         return textPanel;
     }
 
+    public JPanel createTopBar() {
+        JPanel topPanel = new JPanel();
+        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+
+        JLabel titleLabel = new JLabel("Random Hopper");
+        topPanel.add(titleLabel);
+
+        return topPanel;
+    }
+
     public JPanel createPanel() {
         JPanel panel = new JPanel();
+        panel.add(createTopBar());
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel subscriptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -253,6 +270,7 @@ class RandomHopperPanel extends PluginPanel  {
         ActionListener updateWorldsListener = e -> {
             updateWorldCountLabel();
             updateAdjacentWorlds();
+            plugin.saveConfig(generateConfig());
         };
 
         for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, bountyWorldDropdown}) {
@@ -270,18 +288,21 @@ class RandomHopperPanel extends PluginPanel  {
             public void insertUpdate(DocumentEvent e) {
                 plugin.newCycle();
                 updateAdjacentWorlds();
+                plugin.saveConfig(generateConfig());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 plugin.newCycle();
                 updateAdjacentWorlds();
+                plugin.saveConfig(generateConfig());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 plugin.newCycle();
                 updateAdjacentWorlds();
+                plugin.saveConfig(generateConfig());
             }
         });
 
@@ -376,6 +397,50 @@ class RandomHopperPanel extends PluginPanel  {
         } else {
             return seedTextField.getText().hashCode();
         }
+    }
+
+    public void setUiFromConfig(FilterConfig config) {
+        if (config == null) {
+            return;
+        }
+        subscriptionDropdown.setSelectedIndex(config.subscriptionIndex);
+        pvpDropdown.setSelectedIndex(config.pvpIndex);
+        highRiskDropdown.setSelectedIndex(config.highRiskIndex);
+        skillTotalDropdown.setSelectedIndex(config.skillTotalIndex);
+        bountyWorldDropdown.setSelectedIndex(config.bountyWorldIndex);
+        seedTextField.setText(config.seed);
+        usaEastBox.setSelected(config.usaEastSelected);
+        usaWestBox.setSelected(config.usaWestSelected);
+        ukBox.setSelected(config.ukSelected);
+        gerBox.setSelected(config.germanySelected);
+        ausBox.setSelected(config.australiaSelected);
+        getWorldTypeButtons()[config.worldTypeIndex].setSelected(true);
+
+    }
+
+    public FilterConfig generateConfig() {
+        int worldTypeIndex = 0;
+        JRadioButton[] worldTypeRadioButtons = getWorldTypeButtons();
+        for(int i = 0; i < worldTypeRadioButtons.length; i++) {
+            if(worldTypeRadioButtons[i].isSelected()) {
+                worldTypeIndex = i;
+                break;
+            }
+        }
+        return new FilterConfig(
+            subscriptionDropdown.getSelectedIndex(),
+            pvpDropdown.getSelectedIndex(),
+            highRiskDropdown.getSelectedIndex(),
+            skillTotalDropdown.getSelectedIndex(),
+            bountyWorldDropdown.getSelectedIndex(),
+            seedTextField.getText(),
+            usaEastBox.isSelected(),
+            usaWestBox.isSelected(),
+            ukBox.isSelected(),
+            gerBox.isSelected(),
+            ausBox.isSelected(),
+            worldTypeIndex
+        );
     }
 
     private static final String worldCountToolTipText = "How many worlds passed through the filters.";
