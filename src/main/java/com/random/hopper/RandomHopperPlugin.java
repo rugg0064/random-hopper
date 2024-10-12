@@ -221,6 +221,9 @@ public class RandomHopperPlugin extends Plugin
 		if(cycleMapping == null) {
 			return;
 		}
+		if(client.getGameState() == GameState.LOADING || client.getGameState() == GameState.HOPPING) {
+			return;
+		}
 		int currentWorld = client.getWorld();
 		World nextWorld;
 		WorldResult worldResult = worldService.getWorlds();
@@ -238,6 +241,9 @@ public class RandomHopperPlugin extends Plugin
 
 	void hopNext() {
 		if(cycleMapping == null) {
+			return;
+		}
+		if(client.getGameState() == GameState.LOADING || client.getGameState() == GameState.HOPPING) {
 			return;
 		}
 		int currentWorld = client.getWorld();
@@ -296,6 +302,9 @@ public class RandomHopperPlugin extends Plugin
 
 	void doRandomHop()
 	{
+		if(client.getGameState() == GameState.LOADING || client.getGameState() == GameState.HOPPING) {
+			return;
+		}
 		List<WorldFilter> filters = panel.getFilters();
 		filters.add(new BlockIDWorldFilter(client.getWorld()));
 		filters.add(getSkillTotalFilter());
