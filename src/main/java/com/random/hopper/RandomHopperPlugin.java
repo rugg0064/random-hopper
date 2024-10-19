@@ -369,7 +369,6 @@ public class RandomHopperPlugin extends Plugin
 	};
 
 	public void saveConfig(FilterConfig config) {
-		configManager.unsetConfiguration(CONFIG_GROUP, CONFIG_KEY);
 		String json = gson.toJson(config);
 		// System.out.printf("Got string %s%n", json);
 		configManager.setConfiguration(CONFIG_GROUP, CONFIG_KEY, json);
