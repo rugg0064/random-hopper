@@ -371,20 +371,20 @@ public class RandomHopperPlugin extends Plugin
 	public void saveConfig(FilterConfig config) {
 		configManager.unsetConfiguration(CONFIG_GROUP, CONFIG_KEY);
 		String json = gson.toJson(config);
-		System.out.printf("Got string %s%n", json);
+		// System.out.printf("Got string %s%n", json);
 		configManager.setConfiguration(CONFIG_GROUP, CONFIG_KEY, json);
 	}
 
 	public FilterConfig loadConfig() {
 		try {
 			String json = configManager.getConfiguration(CONFIG_GROUP, CONFIG_KEY);
-			System.out.printf("Got string %s%n", json);
+			// System.out.printf("Got string %s%n", json);
 			Type type = new TypeToken<FilterConfig>() {}.getType();
 			FilterConfig config = gson.fromJson(json, type);
 			return config;
 		} catch (Exception e) {
-			System.out.println("ERROR");
-			System.out.println(e);
+			// System.out.println("ERROR");
+			// System.out.println(e);
 		}
 		return null;
 	}
