@@ -27,6 +27,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WorldChanged;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -147,7 +148,7 @@ public class RandomHopperPlugin extends Plugin
 
 	boolean isWorldHopperOpen()
 	{
-		return client.getWidget(WidgetInfo.WORLD_SWITCHER_LIST) != null;
+		return client.getWidget(ComponentID.WORLD_SWITCHER_WORLD_LIST) != null;
 	}
 
 	private void hop(World world)
