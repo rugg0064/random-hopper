@@ -5,7 +5,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
@@ -28,7 +27,6 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WorldChanged;
 import net.runelite.api.widgets.ComponentID;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -180,10 +178,14 @@ public class RandomHopperPlugin extends Plugin
 	}
 
 	ArrayList<World> getValidWorlds(WorldFilter filter) {
-		List<World> worlds = worldService.getWorlds().getWorlds();
+		WorldResult worldResult = worldService.getWorlds();
+		if(worldResult == null) {
+			log.error("worldResult was null");
+			return new ArrayList<World>();
+		}
+		List<World> worlds = worldResult.getWorlds();
 		ArrayList<World> validWorlds = new ArrayList<>();
 		for(World world : worlds) {
-			EnumSet types = world.getTypes();
 			if(filter.isWorldAccepted(world)) {
 				validWorlds.add(world);
 			}
@@ -204,6 +206,10 @@ public class RandomHopperPlugin extends Plugin
 	// Cycle must exist
 	private World getRandomWorldFromCycle() {
 		WorldResult worldResult = worldService.getWorlds();
+		if(worldResult == null) {
+			log.error("worldResult was null");
+			return null;
+		}
 		Random r = new Random();
 		int nextWorldIndex = r.nextInt(cycleMapping.keySet().size());
 		int i = 0;
@@ -228,6 +234,10 @@ public class RandomHopperPlugin extends Plugin
 		int currentWorld = client.getWorld();
 		World nextWorld;
 		WorldResult worldResult = worldService.getWorlds();
+		if(worldResult == null) {
+			log.error("worldResult was null");
+			return;
+		}
 		if(!cycleMapping.containsKey(currentWorld)) {
 			nextWorld = getRandomWorldFromCycle();
 		}
@@ -250,6 +260,10 @@ public class RandomHopperPlugin extends Plugin
 		int currentWorld = client.getWorld();
 		World nextWorld;
 		WorldResult worldResult = worldService.getWorlds();
+		if(worldResult == null) {
+			log.error("worldResult was null");
+			return;
+		}
 		if(!cycleMapping.containsKey(currentWorld)) {
 			nextWorld = getRandomWorldFromCycle();
 		}
@@ -271,7 +285,12 @@ public class RandomHopperPlugin extends Plugin
 		 * getWorlds() does not return a sorted list, must manually sort to ensure
 		 * that the shuffle is consistent given a seed.
  		 */
-		List<World> allWorlds = worldService.getWorlds().getWorlds();
+		WorldResult worldResult = worldService.getWorlds();
+		if(worldResult == null) {
+			log.error("worldResult was null");
+			return;
+		}
+		List<World> allWorlds = worldResult.getWorlds();
 		Collections.sort(allWorlds, Comparator.comparingInt(World::getId));
 		Collections.shuffle(allWorlds, new Random(panel.getSeed()));
 		List<World> validWorlds = filterWorlds(allWorlds, comboFilter);

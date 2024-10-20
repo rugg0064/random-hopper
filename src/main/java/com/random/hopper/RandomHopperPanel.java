@@ -11,17 +11,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 class RandomHopperPanel extends PluginPanel  {
     private RandomHopperPlugin plugin;
 
-    private JComboBox subscriptionDropdown;
-    private JComboBox pvpDropdown;
-    private JComboBox highRiskDropdown;
-    private JComboBox skillTotalDropdown;
-    private JComboBox bountyWorldDropdown;
+    private JComboBox<TrinaryWorldFilterParameters> subscriptionDropdown;
+    private JComboBox<TrinaryWorldFilterParameters> pvpDropdown;
+    private JComboBox<TrinaryWorldFilterParameters> highRiskDropdown;
+    private JComboBox<TrinaryWorldFilterParameters> skillTotalDropdown;
+    private JComboBox<TrinaryWorldFilterParameters> bountyWorldDropdown;
 
     private JCheckBox usaEastBox;
 	private JCheckBox usaWestBox;
@@ -273,7 +274,8 @@ class RandomHopperPanel extends PluginPanel  {
             plugin.saveConfig(generateConfig());
         };
 
-        for(JComboBox component : new JComboBox[] {subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, bountyWorldDropdown}) {
+        List<JComboBox<TrinaryWorldFilterParameters>> components = Arrays.asList(subscriptionDropdown, pvpDropdown, highRiskDropdown, skillTotalDropdown, bountyWorldDropdown);
+        for (JComboBox<TrinaryWorldFilterParameters> component : components) {
             component.addActionListener(updateWorldsListener);
         }
         for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton}) {
