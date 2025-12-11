@@ -1,5 +1,15 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "jdk.jdkhome": "c:\\Program Files\\Amazon Corretto\\jdk11.0.16_9",
-    "java.jdt.ls.java.home": "c:\\Program Files\\Amazon Corretto\\jdk11.0.16_9"
+    "jdk.jdkhome": "/opt/jdk11",
+    "java.jdt.ls.java.home": "/opt/jdk11",
+    "java.project.sourcePaths": [
+        "src/main/java"
+    ],
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/main/.runelite/repository2/*.jar"
+    ],
+    "java.import.gradle.enabled": true,
+    "java.import.gradle.java.home": "/opt/jdk11",
+    "java.import.gradle.wrapper.enabled": true
 }
