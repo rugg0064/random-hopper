@@ -46,6 +46,9 @@ public class WorldFilterHelpers {
     public static final Predicate<World> isWorldTournament =
             world -> world.getTypes().contains(WorldType.TOURNAMENT);
 
+    public static final Predicate<World> isWorldHardcore =
+            world -> world.getTypes().contains(WorldType.HARDCORE_MAIN);
+
     public static final Predicate<World> isWorldNormal = world ->
             !isWorldDeadman.test(world) &&
             !isWorldSeasonal.test(world) &&
@@ -54,6 +57,7 @@ public class WorldFilterHelpers {
             !isWorldPVPArena.test(world) &&
             !isWorldBeta.test(world) &&
 			!isWorldNoSave.test(world) &&
-            !isWorldTournament.test(world);
+            !isWorldTournament.test(world) &&
+            !isWorldHardcore.test(world);
 
 }
