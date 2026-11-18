@@ -14,6 +14,11 @@ public class FilterConfig {
     public boolean ukSelected;
     public boolean germanySelected;
     public boolean australiaSelected;
+    // Boxed so configs saved before these regions existed load as null
+    public Boolean brazilSelected;
+    public Boolean japanSelected;
+    public Boolean singaporeSelected;
+    public Boolean southAfricaSelected;
 
     public int worldTypeIndex;
 
@@ -29,6 +34,10 @@ public class FilterConfig {
             boolean ukSelected,
             boolean germanySelected,
             boolean australiaSelected,
+            Boolean brazilSelected,
+            Boolean japanSelected,
+            Boolean singaporeSelected,
+            Boolean southAfricaSelected,
             int worldTypeIndex) {
         this.subscriptionIndex = subscriptionIndex;
         this.pvpIndex = pvpIndex;
@@ -41,6 +50,10 @@ public class FilterConfig {
         this.ukSelected = ukSelected;
         this.germanySelected = germanySelected;
         this.australiaSelected = australiaSelected;
+        this.brazilSelected = brazilSelected;
+        this.japanSelected = japanSelected;
+        this.singaporeSelected = singaporeSelected;
+        this.southAfricaSelected = southAfricaSelected;
         this.worldTypeIndex = worldTypeIndex;
     }
 }

@@ -1,15 +1,14 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
-    "jdk.jdkhome": "/opt/jdk11",
-    "java.jdt.ls.java.home": "/opt/jdk11",
-    "java.project.sourcePaths": [
-        "src/main/java"
-    ],
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "/home/main/.runelite/repository2/*.jar"
-    ],
-    "java.import.gradle.enabled": true,
-    "java.import.gradle.java.home": "/opt/jdk11",
-    "java.import.gradle.wrapper.enabled": true
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.import.gradle.wrapper.enabled": true,
+	"java.import.gradle.java.home": "/usr/lib/jvm/temurin-17-jdk-amd64",
+	"java.configuration.runtimes": [
+		{
+			"name": "JavaSE-17",
+			"path": "/usr/lib/jvm/temurin-17-jdk-amd64",
+			"default": true
+		}
+	],
+	"java.jdt.ls.lombokSupport.enabled": true,
+	"java.compile.nullAnalysis.mode": "automatic"
 }

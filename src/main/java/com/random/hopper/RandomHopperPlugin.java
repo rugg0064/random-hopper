@@ -75,9 +75,15 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		// The game cache isn't loaded until the login screen, so getEnum returns null before then.
+		// Returning false makes the client thread retry this every tick until it succeeds.
 		clientThread.invoke(() -> {
+			if (client.getGameState().getState() < GameState.LOGIN_SCREEN.getState()) {
+				return false;
+			}
 			WorldHelper.setWorldEnum(client.getEnum(net.runelite.api.EnumID.WORLD_LOCATIONS));
 			shouldRecalculateWorldsOnTick = true;
+			return true;
 		});
 		keyManager.registerKeyListener(randomKeyListener);
 		keyManager.registerKeyListener(previousKeyListener);

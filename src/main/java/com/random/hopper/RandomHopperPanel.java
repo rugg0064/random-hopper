@@ -29,6 +29,10 @@ class RandomHopperPanel extends PluginPanel  {
     private JCheckBox ukBox;
     private JCheckBox gerBox;
     private JCheckBox ausBox;
+    private JCheckBox brazilBox;
+    private JCheckBox japanBox;
+    private JCheckBox singaporeBox;
+    private JCheckBox southAfricaBox;
 
     private JLabel worldCountLabel;
 
@@ -41,10 +45,17 @@ class RandomHopperPanel extends PluginPanel  {
     private JRadioButton betaButton;
 	private JRadioButton noSaveButton;
     private JRadioButton tournamentButton;
+    private JRadioButton hardcoreButton;
 
+    // Order matters: saved configs store an index into this array, so append new types at the end
     public JRadioButton[] getWorldTypeButtons() {
         return new JRadioButton[]{
-            normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton
+            normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton, hardcoreButton
+        };
+    }
+    private JCheckBox[] getRegionBoxes() {
+        return new JCheckBox[]{
+            usaEastBox, usaWestBox, ukBox, gerBox, ausBox, brazilBox, japanBox, singaporeBox, southAfricaBox
         };
     }
     private JTextField seedTextField;
@@ -146,7 +157,7 @@ class RandomHopperPanel extends PluginPanel  {
         groupCodePanel.add(seedTextField);
         panel.add(groupCodePanel);
 
-        // Add a checkbox selection titled "Region" with values "Australia", "Germany", "U.K.", "U.S.A"
+        // Add a checkbox selection titled "Region" with a box for every WorldRegion
         JPanel regionPanel = new JPanel();
         regionPanel.setBorder(BorderFactory.createTitledBorder("Region"));
         regionPanel.setLayout(new GridLayout(0, 1));
@@ -155,7 +166,11 @@ class RandomHopperPanel extends PluginPanel  {
         ukBox = new JCheckBox("U.K.");
         gerBox = new JCheckBox("Germany");
         ausBox = new JCheckBox("Australia");
-        for(JCheckBox box : new JCheckBox[]{usaEastBox, usaWestBox, ukBox, gerBox, ausBox}){
+        brazilBox = new JCheckBox("Brazil");
+        japanBox = new JCheckBox("Japan");
+        singaporeBox = new JCheckBox("Singapore");
+        southAfricaBox = new JCheckBox("South Africa");
+        for(JCheckBox box : getRegionBoxes()){
             regionPanel.add(box);
             box.setSelected(true);
         }
@@ -177,6 +192,7 @@ class RandomHopperPanel extends PluginPanel  {
         betaButton = new JRadioButton("Beta");
 		noSaveButton = new JRadioButton("No Save");
 		tournamentButton = new JRadioButton("Tournament");
+        hardcoreButton = new JRadioButton("Hardcore");
 
         normalButton.setSelected(true);
 
@@ -189,6 +205,7 @@ class RandomHopperPanel extends PluginPanel  {
         typeGroup.add(betaButton);
 		typeGroup.add(noSaveButton);
         typeGroup.add(tournamentButton);
+        typeGroup.add(hardcoreButton);
 
         typePanel.add(normalButton);
         typePanel.add(deadmanButton);
@@ -199,6 +216,7 @@ class RandomHopperPanel extends PluginPanel  {
         typePanel.add(betaButton);
 		typePanel.add(noSaveButton);
         typePanel.add(tournamentButton);
+        typePanel.add(hardcoreButton);
 
         panel.add(typePanel);
 
@@ -278,10 +296,10 @@ class RandomHopperPanel extends PluginPanel  {
         for (JComboBox<TrinaryWorldFilterParameters> component : components) {
             component.addActionListener(updateWorldsListener);
         }
-        for(JRadioButton component : new JRadioButton[]{normalButton, deadmanButton, seasonalButton, questButton, freshButton, pvpArenaButton, betaButton, noSaveButton, tournamentButton}) {
+        for(JRadioButton component : getWorldTypeButtons()) {
             component.addActionListener(updateWorldsListener);
         }
-        for(JCheckBox component : new JCheckBox[] {gerBox, usaEastBox, usaWestBox, ausBox, ukBox}) {
+        for(JCheckBox component : getRegionBoxes()) {
             component.addActionListener(updateWorldsListener);
         }
 
@@ -361,7 +379,11 @@ class RandomHopperPanel extends PluginPanel  {
 				usaEastBox.isSelected(),
 				usaWestBox.isSelected(),
                 gerBox.isSelected(),
-                ukBox.isSelected()));
+                ukBox.isSelected(),
+                brazilBox.isSelected(),
+                japanBox.isSelected(),
+                singaporeBox.isSelected(),
+                southAfricaBox.isSelected()));
 
         if(normalButton.isSelected()) {
             filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldNormal, new TrinaryWorldFilterParameters("normal", true, false)));
@@ -390,6 +412,9 @@ class RandomHopperPanel extends PluginPanel  {
         if(tournamentButton.isSelected()) {
             filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldTournament, new TrinaryWorldFilterParameters("tournament", true, false)));
         }
+        if(hardcoreButton.isSelected()) {
+            filters.add(new TrinaryWorldFilter(WorldFilterHelpers.isWorldHardcore, new TrinaryWorldFilterParameters("hardcore", true, false)));
+        }
         return filters;
     }
 
@@ -416,7 +441,14 @@ class RandomHopperPanel extends PluginPanel  {
         ukBox.setSelected(config.ukSelected);
         gerBox.setSelected(config.germanySelected);
         ausBox.setSelected(config.australiaSelected);
-        getWorldTypeButtons()[config.worldTypeIndex].setSelected(true);
+        brazilBox.setSelected(config.brazilSelected == null || config.brazilSelected);
+        japanBox.setSelected(config.japanSelected == null || config.japanSelected);
+        singaporeBox.setSelected(config.singaporeSelected == null || config.singaporeSelected);
+        southAfricaBox.setSelected(config.southAfricaSelected == null || config.southAfricaSelected);
+        JRadioButton[] worldTypeButtons = getWorldTypeButtons();
+        if (config.worldTypeIndex >= 0 && config.worldTypeIndex < worldTypeButtons.length) {
+            worldTypeButtons[config.worldTypeIndex].setSelected(true);
+        }
 
     }
 
@@ -441,6 +473,10 @@ class RandomHopperPanel extends PluginPanel  {
             ukBox.isSelected(),
             gerBox.isSelected(),
             ausBox.isSelected(),
+            brazilBox.isSelected(),
+            japanBox.isSelected(),
+            singaporeBox.isSelected(),
+            southAfricaBox.isSelected(),
             worldTypeIndex
         );
     }
