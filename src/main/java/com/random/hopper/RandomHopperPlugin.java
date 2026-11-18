@@ -172,7 +172,7 @@ public class RandomHopperPlugin extends Plugin
 		rsWorld.setAddress(world.getAddress());
 		rsWorld.setId(world.getId());
 		rsWorld.setPlayerCount(world.getPlayers());
-		rsWorld.setLocation(world.getLocation());
+		rsWorld.setLocation(world.getRegion().getId());
 		rsWorld.setTypes(WorldUtil.toWorldTypes(world.getTypes()));
 		return rsWorld;
 	}
