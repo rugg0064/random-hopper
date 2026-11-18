@@ -26,7 +26,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WorldChanged;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -75,9 +75,15 @@ public class RandomHopperPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
+		// The game cache isn't loaded until the login screen, so getEnum returns null before then.
+		// Returning false makes the client thread retry this every tick until it succeeds.
 		clientThread.invoke(() -> {
-			WorldHelper.setWorldEnum(client.getEnum(4992));
+			if (client.getGameState().getState() < GameState.LOGIN_SCREEN.getState()) {
+				return false;
+			}
+			WorldHelper.setWorldEnum(client.getEnum(net.runelite.api.EnumID.WORLD_LOCATIONS));
 			shouldRecalculateWorldsOnTick = true;
+			return true;
 		});
 		keyManager.registerKeyListener(randomKeyListener);
 		keyManager.registerKeyListener(previousKeyListener);
@@ -146,7 +152,7 @@ public class RandomHopperPlugin extends Plugin
 
 	boolean isWorldHopperOpen()
 	{
-		return client.getWidget(ComponentID.WORLD_SWITCHER_WORLD_LIST) != null;
+		return client.getWidget(InterfaceID.Worldswitcher.BUTTONS) != null;
 	}
 
 	private void hop(World world)
@@ -172,7 +178,7 @@ public class RandomHopperPlugin extends Plugin
 		rsWorld.setAddress(world.getAddress());
 		rsWorld.setId(world.getId());
 		rsWorld.setPlayerCount(world.getPlayers());
-		rsWorld.setLocation(world.getRegion().getId());
+		rsWorld.setLocation(world.getRegion() != null ? world.getRegion().getId() : 0);
 		rsWorld.setTypes(WorldUtil.toWorldTypes(world.getTypes()));
 		return rsWorld;
 	}
